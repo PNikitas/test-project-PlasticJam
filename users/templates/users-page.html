@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<table border="2" class="table-header">
+    <caption>Users</caption>
+    <tr>
+        <th class="active">id</th>
+        <th class="active">first_name</th>
+        <th class="active">last_name</th>
+        <th class="active">email</th>
+        <th class="active">gender</th>
+        <th class="active">ip_address</th>
+    </tr>
+    {% for user in users %}
+        <tr>
+            <th><a href="http://127.0.0.1:8000/users/{{ user.id }}">{{ user.id }}</a></th>
+            <th>{{ user.first_name }}</th>
+            <th>{{ user.last_name }}</th>
+            <th>{{ user.email }}</th>
+            <th>{{ user.gender }}</th>
+            <th><{{ user.ip_address }}></th>
+        </tr>
+    {% endfor %}
+</table>
+
+{% if users.has_other_pages %}
+    <ul class="pagination">
+        {% if users.has_previous %}
+            <li><a href="?page={{ users.previous_page_number }}">&laquo;</a></li>
+        {% else %}
+            <li class="disabled"><span>&laquo;</span></li>
+        {% endif %}
+        {% for index in users.paginator.page_range %}
+            {% if users.number == index %}
+                <li class="active"><span>{{ index }} <span class="sr-only"></span></span></li>
+            {% else %}
+                <li><a href="?page={{ index }}">{{ index }}</a></li>
+            {% endif %}
+        {% endfor %}
+        {% if users.has_next %}
+            <li><a href="?page={{ users.next_page_number }}">&raquo;</a></li>
+        {% else %}
+            <li class="disabled"><span>&raquo;</span></li>
+        {% endif %}
+    </ul>
+{% endif %}
+
+{% endblock %}

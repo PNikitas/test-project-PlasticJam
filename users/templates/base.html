@@ -1,0 +1,35 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            test-project-PlasticJam
+        </title>
+        <script src="http://d3js.org/d3.v3.min.js"> </script>
+    </head>
+    <body>
+        <style>
+            .table-header {
+                margin-right: auto; 
+                margin-left: auto;
+            }
+            .active {
+                background-color: blue;
+                color: white;
+            }
+            ul.pagination {
+                text-align: center;
+                margin: 10px; 
+                padding: 10px; 
+            }
+            ul.pagination li {
+                display: inline; 
+                margin-right: 5px; 
+                padding: 3px; 
+            }
+        </style>
+        {% block content %}
+        {% endblock %}
+    </body>
+</html>
