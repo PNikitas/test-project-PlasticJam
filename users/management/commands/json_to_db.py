@@ -10,7 +10,7 @@ from users.models import Statistic
 
 class Command(BaseCommand):
     def json_to_db(self):
-        data_folder = os.path.join(BASE_DIR, 'users', 'data')
+        data_folder = os.path.join(BASE_DIR, 'users', 'data/statistic')
         
         for data_file in os.listdir(data_folder):
             with open(os.path.join(data_folder, data_file), encoding='utf-8') as data_file:

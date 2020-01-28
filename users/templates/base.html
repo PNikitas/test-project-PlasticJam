@@ -1,12 +1,17 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html>
+<html lang='en'>
     <head>
+        <meta charset='utf-8'>
         <title>
-            test-project-PlasticJam
+            {% if 'users' in request.path %}
+                users
+            {% else %}
+                test-project-PlasticJam
+            {% endif %}
         </title>
-        <script src="http://d3js.org/d3.v3.min.js"> </script>
+        <script src="http://d3js.org/d3.v3.min.js"></script>
     </head>
     <body>
         <style>

@@ -1,10 +1,13 @@
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from .serializers import *
 
 from .models import *
 
 
-def UsersView(request):
+def AllUsersView(request):
     user_list = User.objects.all()
     page = request.GET.get('page', 1)
     paginator = Paginator(user_list, 50)
@@ -44,3 +47,14 @@ def UserView(request, pk):
     }
 
     return render(request, 'user-page.html', context)
+
+
+class UsersView(APIView):
+    def get(self, request):
+        user = User.objects.all()
+        serializer = UserSerializer(user, many=True)
+        context = {
+            'user': serializer.data,
+        }
+
+        return Response(context)

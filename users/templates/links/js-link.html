@@ -1,0 +1,144 @@
+<script type="text/javascript">
+
+    var index = 1;
+    var statistic_date = [],
+        statistic_page_views = [],
+        statistic_clicks = [];
+
+    try {
+        while(true) {
+            statistic_date.push(document.getElementById('table').rows[index].cells[0].innerHTML);
+            statistic_page_views.push(document.getElementById('table').rows[index].cells[1].innerHTML);
+            statistic_clicks.push(document.getElementById('table').rows[index].cells[2].innerHTML);
+            index++;
+        } 
+    } catch(error) {}
+
+    var date_year = [],
+        date_month = [],
+        date_day = [];
+
+    for(var i=0; i<statistic_date.length; i++) {
+        date_year.push(parseInt(statistic_date[i].slice(0, 4)));
+        date_month.push(parseInt(statistic_date[i].slice(5, 7)));
+        date_day.push(parseInt(statistic_date[i].slice(8, 11)));
+    }
+
+    var min_date = new Date(d3.min(date_year), d3.min(date_month), d3.min(date_day)),
+        max_date = new Date(d3.max(date_year), d3.max(date_month), d3.max(date_day));
+
+    var height = 450,
+        width = 450,
+        margin = 50,
+        axisWidthX = width - 2 * margin,
+        axisWidthY = height - 2 * margin,
+        svg,
+        data = [],
+        data_plot_statistic_page_views = [],
+        data_plot_statistic_clicks = [];
+
+    for(var i=0; i<statistic_date.length; i++) {
+        data_plot_statistic_page_views.push({x: new Date(date_year[i], date_month[i], date_day[i]), y: statistic_page_views[i]});
+        data_plot_statistic_clicks.push({x: new Date(date_year[i], date_month[i], date_day[i]), y: statistic_clicks[i]});
+    }
+    
+    createAxes(data_plot_statistic_page_views, 'page_views');
+    createAxes(data_plot_statistic_clicks, 'clicks');
+
+    function createAxes(data_array, title) {
+        svg = d3.select("body")
+            .append("svg")
+            .attr("class", "axis")
+            .attr("width", width)
+            .attr("height", height);
+
+        var scaleX = d3.time
+            .scale()
+            .domain([min_date, max_date])
+            .range([0, axisWidthX]);
+
+        var scaleY = d3.scale.linear()
+            .domain([1000, 0])
+            .range([0, axisWidthY]);
+
+        for(i=0; i<data_array.length; i++) {
+            data.push({x: scaleX(data_array[i].x)+margin, y: scaleY(data_array[i].y)+margin});
+        }
+
+        var axisX = d3.svg.axis() 
+            .scale(scaleX) 
+            .orient('bottom') 
+            .ticks(5);
+
+        var axisY = d3.svg.axis() 
+            .scale(scaleY) 
+            .orient('left') 
+
+        
+        svg.append("g")
+            .attr("class", "x-axis")
+            .attr("transform", "translate("+margin+","+(height-margin)+")")
+            .call(axisX);
+
+        svg.append("g")
+            .attr("class", "y-axis")
+            .attr("transform", "translate("+margin+","+margin+")")
+            .call(axisY);
+
+        d3.selectAll("g.x-axis g.tick")
+            .append("line") 
+            .classed("grid-line", true) 
+            .attr("x1", 0)
+            .attr("y1", 0)
+            .attr("x2", 0)
+            .attr("y2", - (axisWidthY));
+
+        d3.selectAll("g.y-axis g.tick")
+            .append("line")
+            .classed("grid-line", true)
+            .attr("x1", 0)
+            .attr("y1", 0)
+            .attr("x2", axisWidthX)
+            .attr("y2", 0);
+
+        var line = d3.svg.line()
+            .x(function(d){return d.x;})
+            .y(function(d){return d.y;});
+
+        svg.append("g").append("path")
+            .attr("d", line(data))
+            .style("stroke", "steelblue")
+            .style("stroke-width", 2);
+
+        var g = svg.append("g");
+
+        g.append("path")
+            .attr("d", line(data))
+            .style("stroke", "steelblue")
+            .style("stroke-width", 2);
+
+        g.append("text")
+            .attr("x", (width / 2))
+            .attr("y", margin - 10 )
+            .attr("text-anchor", "middle")
+            .style("font-size", "22px")
+            .text("Attitude chart [date/"+title+"]");
+
+        g.append("text")
+            .attr("x", margin + 11)
+            .attr("y", margin - 11)
+            .attr("text-anchor", "end")
+            .style("font-size", "11px")
+            .text(title);
+        
+        g.append("text")
+            .attr("x", width - margin + 11)
+            .attr("y", height - margin - 5)
+            .attr("text-anchor", "end")
+            .style("font-size", "11px")
+            .text("date");
+
+            data = [];
+    }
+    
+</script>

@@ -2,6 +2,7 @@
 
 {% block content %}
 
+<a href="http://127.0.0.1:8000/api/users/?format=json">API</a>
 <table border="2" class="table-header">
     <caption>Users</caption>
     <tr>
@@ -19,7 +20,7 @@
             <th>{{ user.last_name }}</th>
             <th>{{ user.email }}</th>
             <th>{{ user.gender }}</th>
-            <th><{{ user.ip_address }}></th>
+            <th>{{ user.ip_address }}</th>
         </tr>
     {% endfor %}
 </table>
